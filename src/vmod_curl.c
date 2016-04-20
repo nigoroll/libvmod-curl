@@ -42,6 +42,7 @@ struct vmod_curl {
 	const char *error;
 	const char *cafile;
 	const char *capath;
+	const char *sun_path;
 	VTAILQ_HEAD(, hdr) headers;
 	VTAILQ_HEAD(, req_hdr) req_headers;
 	const char *proxy;
@@ -127,6 +128,7 @@ cm_clear(struct vmod_curl *c)
 	c->timeout = -1;
 	c->cafile = NULL;
 	c->capath = NULL;
+	c->sun_path = NULL;
 	c->error = NULL;
 	c->flags = 0;
 	c->method = NULL;
@@ -293,6 +295,10 @@ cm_perform(struct vmod_curl *c)
 	if (c->capath)
 		curl_easy_setopt(curl_handle, CURLOPT_CAPATH, c->capath);
 
+	if (c->sun_path)
+		curl_easy_setopt(curl_handle, CURLOPT_UNIX_SOCKET_PATH,
+		    c->sun_path);
+
 	curl_easy_setopt(curl_handle, CURLOPT_CUSTOMREQUEST, c->method);
 
 	cr = curl_easy_perform(curl_handle);
@@ -439,6 +445,12 @@ VCL_VOID
 vmod_set_ssl_capath(VRT_CTX, VCL_STRING path, struct vmod_priv *priv)
 {
 	cm_get(priv)->capath = path;
+}
+
+VCL_VOID
+vmod_set_unix(VRT_CTX, VCL_STRING path, struct vmod_priv *priv)
+{
+	cm_get(priv)->sun_path = path;
 }
 
 VCL_VOID
