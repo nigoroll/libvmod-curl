@@ -2,39 +2,17 @@ AC_PREREQ(2.64)
 AC_COPYRIGHT([Copyright (c) 2011-2016 Varnish Software])
 AC_INIT([libvmod-curl], [1.0.4])
 AC_CONFIG_MACRO_DIR([m4])
-AC_CONFIG_SRCDIR(src/vmod_curl.vcc)
-AM_CONFIG_HEADER(config.h)
-
-AC_CANONICAL_SYSTEM
-AC_LANG(C)
+AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_HEADERS(config.h)
 
 AM_INIT_AUTOMAKE([foreign color-tests parallel-tests])
+AM_SILENT_RULES([yes])
 
-AC_GNU_SOURCE
-AC_PROG_CC
-AC_PROG_CC_STDC
-if test "x$ac_cv_prog_cc_c99" = xno; then
-	AC_MSG_ERROR([Could not find a C99 compatible compiler])
-fi
-AC_PROG_CPP
+AC_ARG_VAR([RST2MAN], [the program to build manuals from reStructuredText])
+AC_CHECK_PROGS(RST2MAN, [rst2man rst2man.py])
 
-AC_PROG_INSTALL
-AC_PROG_LIBTOOL
-AC_PROG_MAKE_SET
-
-# Check for rst utilities
-AC_CHECK_PROGS(RST2MAN, [rst2man rst2man.py], "no")
-if test "x$RST2MAN" = "xno"; then
-	AC_MSG_WARN([rst2man not found - not building man pages])
-fi
-AM_CONDITIONAL(HAVE_RST2MAN, [test "x$RST2MAN" != "xno"])
-
-# Check for pkg-config
-PKG_PROG_PKG_CONFIG
 PKG_CHECK_MODULES([CURL], [libcurl])
 
-# Checks for header files.
-AC_HEADER_STDC
 AC_CHECK_HEADERS([sys/stdlib.h])
 
 # Check for python
@@ -43,20 +21,19 @@ if test "x$PYTHON" = "xno"; then
 	AC_MSG_ERROR([Python is needed to build this vmod, please install python.])
 fi
 
-VARNISH_PREREQ([7.3.0])
+VARNISH_PREREQ([7.5.0])
 VARNISH_VMODS([curl])
 
-AX_CURLOPT_CHECK([CURLOPT_TIMEOUT_MS])
-AX_CURLOPT_CHECK([CURLOPT_CONNECTTIMEOUT_MS])
-AX_CURLOPT_CHECK([CURLOPT_UNIX_SOCKET_PATH])
+AM_PROG_AR
 
-VMOD_TESTS="$(cd $srcdir/src && echo tests/*.vtc)"
-AC_SUBST(VMOD_TESTS)
+LT_PREREQ([2.2.6])
+LT_INIT([dlopen disable-static])
 
 AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
 ])
+
 AC_OUTPUT
 
 AS_ECHO("

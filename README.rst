@@ -1,3 +1,10 @@
+=========
+vmod_curl
+=========
+
+-------------------------
+cURL bindings for Varnish
+-------------------------
 
 .. image:: https://travis-ci.org/varnish/libvmod-curl.svg?branch=master
    :alt: Travis CI badge
@@ -46,25 +53,6 @@ Then proceed to the configure and build::
 
 The resulting loadable modules (``libvmod_*.so`` files) will be installed to
 the Varnish module directory. (default `/usr/lib/varnish/vmods/`)
-
-Usage
-=====
-
-To use the vmod do something along the lines of::
-
-	import curl;
-
-	sub vcl_recv {
-		curl.get("http://example.com/test");
-		if (curl.header("X-Foo") == "bar") {
-		...
-		}
-
-		curl.free();
-	}
-
-
-See src/vmod_curl.vcc for the rest of the callable functions.
 
 Development
 ===========
