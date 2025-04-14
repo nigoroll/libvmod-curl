@@ -17,6 +17,10 @@ nodist_libvmod_curl_la_SOURCES = \
 	vcc_curl_if.c \
 	vcc_curl_if.h
 
+vmod_vcs_version.txt: vcc_curl_if.c
+
+DISTCLEANFILES = vmod_vcs_version.txt
+
 @BUILD_VMOD_CURL@
 
 # Test suite
@@ -50,6 +54,7 @@ TESTS = \
 
 dist_doc_DATA = \
 	vmod_curl.vcc \
+	vmod_vcs_version.txt \
 	$(TESTS)
 
 dist_man_MANS = \
