@@ -38,3 +38,5 @@ vmod_*.rst
 *_options.rst
 *_synopsis.rst
 vmod_*.3
+
+src/vmod_vcs_version.txt
