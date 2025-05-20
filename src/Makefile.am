@@ -6,13 +6,20 @@ vmod_LTLIBRARIES = \
 	libvmod_curl.la
 
 libvmod_curl_la_CFLAGS = $(AM_CFLAGS) $(CURL_CFLAGS)
+
 libvmod_curl_la_LDFLAGS = $(VMOD_LDFLAGS) $(CURL_LIBS)
+
 libvmod_curl_la_SOURCES = \
 	vmod_curl.c \
 	debug_flags.h
+
 nodist_libvmod_curl_la_SOURCES = \
 	vcc_curl_if.c \
 	vcc_curl_if.h
+
+vmod_vcs_version.txt: vcc_curl_if.c
+
+DISTCLEANFILES = vmod_vcs_version.txt
 
 @BUILD_VMOD_CURL@
 
@@ -26,12 +33,28 @@ VTC_LOG_COMPILER = varnishtest -lv
 AM_VTC_LOG_FLAGS = \
 	-p vcl_path="$(abs_top_srcdir)/vcl:$(VARNISHAPI_VCLDIR)" \
 	-p vmod_path="$(abs_builddir)/.libs:$(vmoddir):$(VARNISHAPI_VMODDIR)"
-TESTS = @VMOD_TESTS@
+
+TESTS = \
+	vtc/test01.vtc \
+	vtc/test02.vtc \
+	vtc/test03.vtc \
+	vtc/test04.vtc \
+	vtc/test05.vtc \
+	vtc/test06.vtc \
+	vtc/test07.vtc \
+	vtc/test08.vtc \
+	vtc/test09.vtc \
+	vtc/test10.vtc \
+	vtc/test11.vtc \
+	vtc/test12.vtc \
+	vtc/test13.vtc \
+	vtc/test14.vtc
 
 # Documentation
 
 dist_doc_DATA = \
 	vmod_curl.vcc \
+	vmod_vcs_version.txt \
 	$(TESTS)
 
 dist_man_MANS = \

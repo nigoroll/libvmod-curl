@@ -19,6 +19,8 @@ varnish v1 -vcl+backend {
 		# Fix for RHEL5 old curl lib
 		if (resp.http.x-error == "couldn't connect to server") {
 			set resp.http.x-error = "Couldn't connect to server";
+		} else if (resp.http.x-error == "Could not connect to server") {
+			set resp.http.x-error = "Couldn't connect to server";
 		}
 	}
 } -start
